@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   const session = await getApiSession();
 
   if (!session.user || session.role !== "admin") {
-    return NextResponse.json({ ok: false, message: "Khong co quyen." }, { status: 403 });
+    return NextResponse.json({ ok: false, message: "Unauthorized." }, { status: 403 });
   }
 
   const { count, prefix } = (await request.json()) as { count?: number; prefix?: string };
@@ -38,8 +38,8 @@ export async function POST(request: Request) {
   const { error } = await session.supabase.from("qr_codes").insert(payload);
 
   if (error) {
-    return NextResponse.json({ ok: false, message: "Khong tao duoc QR." }, { status: 500 });
+    return NextResponse.json({ ok: false, message: "Unable to generate QR codes." }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, message: `Da tao ${size} QR moi.` });
+  return NextResponse.json({ ok: true, message: `Generated ${size} new QR codes.` });
 }

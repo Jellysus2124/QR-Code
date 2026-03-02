@@ -8,12 +8,12 @@ function parseCsvLine(line: string) {
 export async function POST(request: Request) {
   const session = await getApiSession();
   if (!session.user || session.role !== "admin") {
-    return NextResponse.json({ ok: false, message: "Khong co quyen." }, { status: 403 });
+    return NextResponse.json({ ok: false, message: "Unauthorized." }, { status: 403 });
   }
 
   const { csv } = (await request.json()) as { csv?: string };
   if (!csv) {
-    return NextResponse.json({ ok: false, message: "CSV rong." }, { status: 400 });
+    return NextResponse.json({ ok: false, message: "CSV is empty." }, { status: 400 });
   }
 
   const lines = csv
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     .filter(Boolean);
 
   if (lines.length < 2) {
-    return NextResponse.json({ ok: false, message: "CSV can it nhat 1 dong du lieu." }, { status: 400 });
+    return NextResponse.json({ ok: false, message: "CSV must contain at least one data row." }, { status: 400 });
   }
 
   const headers = parseCsvLine(lines[0]).map((item) => item.toLowerCase());
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        message: "CSV can cot email va donation_quantity.",
+        message: "CSV must contain email and donation_quantity columns.",
       },
       { status: 400 },
     );
@@ -60,14 +60,14 @@ export async function POST(request: Request) {
   });
 
   if (payload.length === 0) {
-    return NextResponse.json({ ok: false, message: "Khong co dong hop le de import." }, { status: 400 });
+    return NextResponse.json({ ok: false, message: "No valid rows to import." }, { status: 400 });
   }
 
   const { error } = await session.supabase.from("contributors").upsert(payload, { onConflict: "email" });
 
   if (error) {
-    return NextResponse.json({ ok: false, message: "Import that bai." }, { status: 500 });
+    return NextResponse.json({ ok: false, message: "Import failed." }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, message: `Da import ${payload.length} contributor.` });
+  return NextResponse.json({ ok: true, message: `Imported ${payload.length} contributor records.` });
 }

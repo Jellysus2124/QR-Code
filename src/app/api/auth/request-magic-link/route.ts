@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const normalizedEmail = email?.trim().toLowerCase();
 
   if (!normalizedEmail) {
-    return NextResponse.json({ ok: false, message: "Email khong hop le." }, { status: 400 });
+    return NextResponse.json({ ok: false, message: "Invalid email." }, { status: 400 });
   }
 
   const staffAllowlist = (process.env.STAFF_ALLOWLIST ?? "")
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        message: "Email chua duoc duyet. Vui long lien he admin.",
+        message: "Email is not approved yet. Please contact admin.",
       },
       { status: 403 },
     );
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !anonKey) {
-    return NextResponse.json({ ok: false, message: "Thieu cau hinh Supabase." }, { status: 500 });
+    return NextResponse.json({ ok: false, message: "Missing Supabase configuration." }, { status: 500 });
   }
 
   const supabase = createClient(url, anonKey);
@@ -51,13 +51,13 @@ export async function POST(request: Request) {
 
   if (error) {
     return NextResponse.json(
-      { ok: false, message: `Khong gui duoc magic link: ${error.message}` },
+      { ok: false, message: `Unable to send magic link: ${error.message}` },
       { status: 500 },
     );
   }
 
   return NextResponse.json({
     ok: true,
-    message: "Da gui magic link. Vui long kiem tra email.",
+    message: "Magic link sent. Please check your email.",
   });
 }

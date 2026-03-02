@@ -12,11 +12,11 @@ export default async function Home() {
           QR Tracking System
         </p>
         <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl">
-          Theo doi bo dung cu hoc tap den tung hoc sinh
+          Track every stationery kit delivered to students
         </h1>
         <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700 sm:text-lg">
-          Tao lo QR, gan QR cho nha tai tro, quet nhanh khi trao qua va gui thong bao ngay trong tai khoan
-          contributor.
+          Generate QR batches, assign codes to contributors, scan quickly during distribution, and send in-app
+          delivery notifications.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -24,13 +24,13 @@ export default async function Home() {
             href={homePath}
             className="rounded-xl bg-teal-700 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-800"
           >
-            {user ? "Vao bang dieu khien" : "Dang nhap"}
+            {user ? "Open dashboard" : "Sign in"}
           </Link>
           <Link
             href="/login"
             className="rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold hover:bg-slate-100"
           >
-            Nhan link dang nhap
+            Get sign-in link
           </Link>
         </div>
       </div>

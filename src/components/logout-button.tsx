@@ -19,7 +19,7 @@ export function LogoutButton() {
       onClick={onLogout}
       className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-100"
     >
-      Dang xuat
+      Log out
     </button>
   );
 }

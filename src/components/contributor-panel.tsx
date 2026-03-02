@@ -35,7 +35,7 @@ export function ContributorPanel({ items }: { items: NotificationItem[] }) {
               <h3 className="font-semibold">{item.title}</h3>
               <p className="mt-1 text-sm text-slate-700">{item.body}</p>
               <p className="mt-2 text-xs text-slate-500">
-                {new Date(item.created_at).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}
+                {new Date(item.created_at).toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" })}
               </p>
             </div>
             {!item.is_read && (
@@ -44,7 +44,7 @@ export function ContributorPanel({ items }: { items: NotificationItem[] }) {
                 onClick={() => markRead(item.id)}
                 className="rounded-lg border border-slate-300 px-3 py-1 text-xs font-semibold hover:bg-slate-100"
               >
-                Da doc
+                Mark as read
               </button>
             )}
           </div>

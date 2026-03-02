@@ -25,7 +25,7 @@ export default async function AdminPage() {
       <header className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold">Admin Dashboard</h1>
-          <p className="text-sm text-slate-600">Quan ly contributor, QR va phan bo qua.</p>
+          <p className="text-sm text-slate-600">Manage contributors, QR codes, and kit allocation.</p>
         </div>
         <LogoutButton />
       </header>

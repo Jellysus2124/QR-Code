@@ -14,7 +14,7 @@ function normalizeCodes(codes: string[]) {
 export async function POST(request: Request) {
   const session = await getApiSession();
   if (!session.user || session.role !== "admin") {
-    return NextResponse.json({ ok: false, message: "Khong co quyen." }, { status: 403 });
+    return NextResponse.json({ ok: false, message: "Unauthorized." }, { status: 403 });
   }
 
   const body = (await request.json()) as ExportBody;
@@ -22,11 +22,11 @@ export async function POST(request: Request) {
   const codes = normalizeCodes(rawCodes);
 
   if (codes.length === 0) {
-    return NextResponse.json({ ok: false, message: "Khong co QR nao duoc chon." }, { status: 400 });
+    return NextResponse.json({ ok: false, message: "No QR codes selected." }, { status: 400 });
   }
 
   if (codes.length > 300) {
-    return NextResponse.json({ ok: false, message: "Toi da 300 QR moi lan export." }, { status: 400 });
+    return NextResponse.json({ ok: false, message: "Maximum 300 QR codes per export." }, { status: 400 });
   }
 
   const { data: qrs, error } = await session.supabase
@@ -36,18 +36,18 @@ export async function POST(request: Request) {
     .order("code", { ascending: true });
 
   if (error) {
-    return NextResponse.json({ ok: false, message: "Khong lay duoc du lieu QR." }, { status: 500 });
+    return NextResponse.json({ ok: false, message: "Unable to fetch QR data." }, { status: 500 });
   }
 
   if (!qrs || qrs.length === 0) {
-    return NextResponse.json({ ok: false, message: "Khong tim thay QR hop le." }, { status: 404 });
+    return NextResponse.json({ ok: false, message: "No valid QR codes found." }, { status: 404 });
   }
 
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.HelveticaBold);
 
-  const pageWidth = 595.28; // A4 width in points
-  const pageHeight = 841.89; // A4 height in points
+  const pageWidth = 595.28;
+  const pageHeight = 841.89;
   const margin = 28;
   const cols = 3;
   const rows = 4;

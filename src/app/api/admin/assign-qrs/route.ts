@@ -4,14 +4,14 @@ import { getApiSession } from "@/lib/api-auth";
 export async function POST(request: Request) {
   const session = await getApiSession();
   if (!session.user || session.role !== "admin") {
-    return NextResponse.json({ ok: false, message: "Khong co quyen." }, { status: 403 });
+    return NextResponse.json({ ok: false, message: "Unauthorized." }, { status: 403 });
   }
 
   const { email, codes } = (await request.json()) as { email?: string; codes?: string[] };
   const normalizedEmail = email?.trim().toLowerCase();
 
   if (!normalizedEmail || !codes || codes.length === 0) {
-    return NextResponse.json({ ok: false, message: "Thieu du lieu gan QR." }, { status: 400 });
+    return NextResponse.json({ ok: false, message: "Missing QR assignment data." }, { status: 400 });
   }
 
   const cleanCodes = [...new Set(codes.map((code) => code.trim().toUpperCase()).filter(Boolean))];
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     .maybeSingle();
 
   if (!contributor) {
-    return NextResponse.json({ ok: false, message: "Contributor khong ton tai." }, { status: 404 });
+    return NextResponse.json({ ok: false, message: "Contributor not found." }, { status: 404 });
   }
 
   const { data: availableQrs } = await session.supabase
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        message: "Mot so QR khong ton tai hoac khong con trang thai available.",
+        message: "Some QR codes do not exist or are not in available status.",
       },
       { status: 400 },
     );
@@ -56,8 +56,8 @@ export async function POST(request: Request) {
     .in("id", ids);
 
   if (error) {
-    return NextResponse.json({ ok: false, message: "Khong gan duoc QR." }, { status: 500 });
+    return NextResponse.json({ ok: false, message: "Unable to assign QR codes." }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, message: `Da gan ${ids.length} QR cho ${normalizedEmail}.` });
+  return NextResponse.json({ ok: true, message: `Assigned ${ids.length} QR codes to ${normalizedEmail}.` });
 }

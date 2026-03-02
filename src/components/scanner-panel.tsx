@@ -73,7 +73,7 @@ export function ScannerPanel() {
               {
                 code,
                 status: "error" as const,
-                message: "Loi ket noi. Thu lai.",
+                message: "Connection error. Please try again.",
                 time: new Date().toISOString(),
               },
               ...prev,
@@ -89,7 +89,7 @@ export function ScannerPanel() {
         }
       } catch {
         if (mounted) {
-          setError("Khong mo duoc camera. Vui long cap quyen camera.");
+          setError("Cannot access camera. Please allow camera permission.");
           setRunning(false);
         }
       }
@@ -108,29 +108,27 @@ export function ScannerPanel() {
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-medium">Ten truong</span>
+          <span className="font-medium">School name</span>
           <input
             value={schoolName}
             onChange={(e) => setSchoolName(e.target.value)}
-            placeholder="VD: THCS Nguyen Trai"
+            placeholder="Example: Riverside Secondary School"
             className="w-full rounded-lg border border-slate-300 px-3 py-2"
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-medium">Lop</span>
+          <span className="font-medium">Class</span>
           <input
             value={className}
             onChange={(e) => setClassName(e.target.value)}
-            placeholder="VD: 7A1"
+            placeholder="Example: 7A1"
             className="w-full rounded-lg border border-slate-300 px-3 py-2"
           />
         </label>
       </div>
 
       {!canScan && (
-        <p className="rounded-lg bg-amber-100 px-3 py-2 text-sm text-amber-900">
-          Dien thong tin truong va lop truoc khi quet.
-        </p>
+        <p className="rounded-lg bg-amber-100 px-3 py-2 text-sm text-amber-900">Fill in school and class before scanning.</p>
       )}
 
       {error && <p className="rounded-lg bg-rose-100 px-3 py-2 text-sm text-rose-900">{error}</p>}
@@ -139,12 +137,10 @@ export function ScannerPanel() {
         <video ref={videoRef} className="h-[320px] w-full object-cover" muted playsInline />
       </div>
 
-      <p className="text-sm text-slate-600">
-        Trang thai: {running ? "Dang quet" : "Tam dung"}
-      </p>
+      <p className="text-sm text-slate-600">Status: {running ? "Scanning" : "Paused"}</p>
 
       <div className="space-y-2">
-        <h3 className="text-base font-semibold">Ket qua gan day</h3>
+        <h3 className="text-base font-semibold">Recent results</h3>
         <ul className="space-y-2">
           {items.map((item, idx) => (
             <li

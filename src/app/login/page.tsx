@@ -1,7 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -33,7 +32,7 @@ export default function LoginPage() {
       })
       .then(({ error: sessionError }) => {
         if (sessionError) {
-          setError("Dang nhap that bai. Vui long thu lai.");
+          setError("Sign-in failed. Please try again.");
           return;
         }
         window.history.replaceState({}, document.title, "/dashboard");
@@ -62,7 +61,7 @@ export default function LoginPage() {
         setMessage(payload.message);
       }
     } catch {
-      setError("Khong gui duoc link. Thu lai sau.");
+      setError("Unable to send link. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -71,10 +70,8 @@ export default function LoginPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-lg items-center px-6 py-10">
       <div className="w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-bold">Dang nhap bang email</h1>
-        <p className="mt-2 text-sm text-slate-600">
-          Nhap email da dang ky trong he thong. Ban se nhan duoc magic link.
-        </p>
+        <h1 className="text-2xl font-bold">Sign in with email</h1>
+        <p className="mt-2 text-sm text-slate-600">Enter your registered email. You will receive a magic link.</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <label className="block space-y-1">
@@ -94,7 +91,7 @@ export default function LoginPage() {
             type="submit"
             className="w-full rounded-lg bg-teal-700 px-4 py-2 font-semibold text-white hover:bg-teal-800 disabled:opacity-60"
           >
-            {loading ? "Dang gui..." : "Gui magic link"}
+            {loading ? "Sending..." : "Send magic link"}
           </button>
         </form>
 

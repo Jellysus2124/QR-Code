@@ -5,12 +5,12 @@ export async function POST(request: Request) {
   const session = await getApiSession();
 
   if (!session.user || !session.user.email) {
-    return NextResponse.json({ ok: false, message: "Chua dang nhap." }, { status: 401 });
+    return NextResponse.json({ ok: false, message: "Not signed in." }, { status: 401 });
   }
 
   const { id } = (await request.json()) as { id?: string };
   if (!id) {
-    return NextResponse.json({ ok: false, message: "Thieu ID thong bao." }, { status: 400 });
+    return NextResponse.json({ ok: false, message: "Missing notification ID." }, { status: 400 });
   }
 
   const { error } = await session.supabase
@@ -20,8 +20,8 @@ export async function POST(request: Request) {
     .eq("recipient_email", session.user.email);
 
   if (error) {
-    return NextResponse.json({ ok: false, message: "Khong cap nhat duoc." }, { status: 500 });
+    return NextResponse.json({ ok: false, message: "Unable to update notification." }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, message: "Da danh dau da doc." });
+  return NextResponse.json({ ok: true, message: "Marked as read." });
 }

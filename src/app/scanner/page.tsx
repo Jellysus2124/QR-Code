@@ -10,7 +10,7 @@ export default async function ScannerPage() {
       <header className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold">Scanner Dashboard</h1>
-          <p className="text-sm text-slate-600">Quet nhanh QR khi phat qua cho hoc sinh.</p>
+          <p className="text-sm text-slate-600">Scan QR codes quickly during kit distribution.</p>
         </div>
         <LogoutButton />
       </header>
